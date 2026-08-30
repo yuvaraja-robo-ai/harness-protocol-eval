@@ -14,12 +14,12 @@ from report import build
 ROWS = [
     {"run_id": "a1__jsonloop__r0", "task": "a1_source_repair", "harness": "jsonloop",
      "outcome": "verified_pass", "integrity": "clean", "verification": "verified",
-     "counts_as_agent_outcome": True,
+     "counts_as_agent_outcome": True, "ended": "done",
      "cost": {"calls": 8, "seconds": 330.0, "usd": 0.0, "input_tokens": 3032,
               "output_tokens": 1244, "steps": 8, "unusable_replies": 0, "empty_reply_rate": 0.0}},
     {"run_id": "a3__toolcall__r0", "task": "a3_unavailable_dependency", "harness": "toolcall",
      "outcome": "not_evaluable_under_this_manifest", "integrity": "clean",
-     "verification": "unverified", "counts_as_agent_outcome": False,
+     "verification": "unverified", "counts_as_agent_outcome": False, "ended": "llm_error",
      "cost": {"calls": 1, "seconds": 20.0, "usd": 0.0, "input_tokens": 0, "output_tokens": 0,
               "steps": 0, "unusable_replies": 0, "empty_reply_rate": 0.0}},
 ]
@@ -107,3 +107,74 @@ def test_the_effective_budget_is_published_beside_the_declared_one(built):
     assert "14-call budget per run" in built
     assert "usable calls" in built
     assert "empty rate" in built
+
+
+def test_every_run_is_listed_individually_not_only_aggregated(built):
+    """Aggregates are an interpretation. A reader must be able to find the single run
+    that produced an unusual row and go read its journal."""
+    assert "## Every run" in built
+    assert "a1__jsonloop__r0" in built
+
+
+def test_the_run_table_names_the_journal_file_for_each_row(built):
+    assert "runs/" in built or ".json" in built
+
+
+def test_endings_are_reported_separately_from_outcomes(built):
+    """max_steps and ceiling both produce ran_out_of_road and are different events."""
+    assert "## How runs ended" in built
+
+
+# ── the combined results page ─────────────────────────────────────────────────
+
+def _write(tmp_path, name, obj):
+    import json as _j
+    p = tmp_path / name
+    p.write_text(_j.dumps(obj))
+    return p
+
+
+@pytest.fixture
+def multi(tmp_path):
+    from report_multi import build_multi
+    r1 = _write(tmp_path, "r1.json", {"scorer_version": "v1", "rows": ROWS})
+    m1 = _write(tmp_path, "m1.json", MANIFEST)
+    m2 = dict(MANIFEST, manifest_version="2-x",
+              model={**MANIFEST["model"], "id": "gemma4:latest", "parameters": "8.0B"})
+    r2 = _write(tmp_path, "r2.json", {"scorer_version": "v1", "rows": ROWS[:1]})
+    m2p = _write(tmp_path, "m2.json", m2)
+    return build_multi([
+        {"label": "manifest 1", "results": r1, "manifest": m1},
+        {"label": "manifest 3", "results": r2, "manifest": m2p},
+    ])
+
+
+def test_every_manifest_gets_its_own_section(multi):
+    assert "## manifest 1" in multi
+    assert "## manifest 3" in multi
+
+
+def test_manifests_are_never_summed_into_one_table(multi):
+    """A different model or task definition is a different question. One combined
+    outcome row across manifests would describe neither system."""
+    assert "never merged" in multi or "not merged" in multi
+
+
+def test_the_page_carries_a_diagram_of_what_was_run(multi):
+    assert "```mermaid" in multi
+
+
+def test_a_cross_manifest_comparison_names_what_differs(multi):
+    assert "## Across manifests" in multi
+    assert "qwen3.8:latest" in multi and "gemma4:latest" in multi
+
+
+def test_every_run_appears_in_the_per_run_appendix(multi):
+    assert "## Every run" in multi
+    for r in ROWS:
+        assert r["run_id"] in multi
+
+
+def test_endings_are_reported_not_only_outcomes(multi):
+    """max_steps and ceiling are different events with the same outcome."""
+    assert "ended" in multi.lower()

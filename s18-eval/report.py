@@ -14,6 +14,8 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
+from collections import Counter  # noqa: E402
+
 from aggregate import by_cell, by_harness, by_task, coverage_report, summarise  # noqa: E402
 
 OUTCOME_COLS = ["verified_pass", "unverified_pass", "false_success",
@@ -137,6 +139,40 @@ def build(results_path, manifest_path, diff_path=None) -> str:
         "counts, which are real counts from the provider's usage block rather than a "
         "character-length estimate.\n")
 
+    add("## How runs ended\n")
+    add("`ended` is recorded separately from `outcome` because `max_steps` and `ceiling` "
+        "both produce `ran out of road` and are different events: one is a budget "
+        "running out, the other is a rule firing.\n")
+    endings = {}
+    for r in rows:
+        endings[r["ended"]] = endings.get(r["ended"], 0) + 1
+    add("| Ending | Runs | Meaning |\n|---|---:|---|")
+    meanings = {
+        "done": "the agent emitted a final answer",
+        "max_steps": "the call budget ran out mid-work",
+        "ceiling": "four consecutive failing verifications; the rule stopped it",
+        "llm_error": "the model call failed — nothing about the agent was measured",
+        "adapter_error": "the harness itself broke — likewise",
+    }
+    for k, v in sorted(endings.items(), key=lambda kv: -kv[1]):
+        add(f"| `{k}` | {v} | {meanings.get(k, '')} |")
+    add("")
+
+    add("## Outcome by task and protocol\n")
+    add("The cell-level view. Three repeats behind every entry.\n")
+    harnesses_o = sorted({r["harness"] for r in rows})
+    add("| Task | " + " | ".join(harnesses_o) + " |\n|---|" + "|".join(["---"] * len(harnesses_o)) + "|")
+    for task in sorted({r["task"] for r in rows}):
+        cells = []
+        for h in harnesses_o:
+            g = [r for r in rows if r["task"] == task and r["harness"] == h]
+            counts = {}
+            for r in g:
+                counts[r["outcome"]] = counts.get(r["outcome"], 0) + 1
+            cells.append(" · ".join(f"{SHORT.get(k, k)} ×{v}" for k, v in sorted(counts.items())) or "—")
+        add(f"| {task} | " + " | ".join(cells) + " |")
+    add("")
+
     add("## What each zero means\n")
     add("A clean zero and an untested zero look identical in a results table. This is "
         "the table that tells them apart.\n")
@@ -154,6 +190,21 @@ def build(results_path, manifest_path, diff_path=None) -> str:
             where = ", ".join(c["reachable_from"]) or "—"
         add(f"| {prop} | {c['observed']} | {att} | {c['runs_on_declared_tasks']} | "
             f"{where} | {c['status']} |")
+    add("")
+
+    add("## Every run\n")
+    add("One row per journal, so any aggregate above can be traced to the runs behind "
+        "it. `int` is integrity, `ver` is verification. Journals are in the runs "
+        "directory named by `run_id`.\n")
+    add("| run_id | outcome | int | ver | ended | calls | unusable | steps | seconds |"
+        "\n|---|---|---|---|---|---:|---:|---:|---:|")
+    for r in sorted(rows, key=lambda r: r["run_id"]):
+        integ = {"clean": "clean", "protected_write": "**WROTE**",
+                 "refused_protected_write": "refused"}.get(r["integrity"], r["integrity"])
+        c = r["cost"]
+        add(f"| `{r['run_id']}` | {SHORT.get(r['outcome'], r['outcome'])} | {integ} | "
+            f"{r['verification']} | `{r['ended']}` | {c['calls']} | {c['unusable_replies']} | "
+            f"{c['steps']} | {c['seconds']:.0f} |")
     add("")
 
     if diff_path and pathlib.Path(diff_path).exists():

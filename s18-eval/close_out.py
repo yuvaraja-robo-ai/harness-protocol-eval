@@ -26,7 +26,7 @@ def main() -> int:
         print("no journals in runs/; run run_grid.py first")
         return 1
 
-    for cmd in (["python3", "rescore.py", "--both"], ["python3", "report.py"]):
+    for cmd in (["python3", "rescore.py", "--both"], ["python3", "report_multi.py"]):
         r = subprocess.run(cmd, cwd=ROOT, text=True, capture_output=True)
         print(r.stdout.rstrip() or r.stderr.rstrip())
         if r.returncode:
