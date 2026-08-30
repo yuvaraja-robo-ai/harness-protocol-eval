@@ -1,0 +1,6 @@
+[submodule "glc_v5"]
+	path = glc_v5
+	url = https://github.com/yuvaraja-robo-ai/glc_v5.git
+[submodule "S18Code"]
+	path = S18Code
+	url = git@github.com:yuvaraja-robo-ai/S18Code.git

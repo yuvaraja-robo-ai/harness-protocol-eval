@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.ws/
+.attack_ws/
+grid.log
+.venv/

@@ -1,0 +1,61 @@
+  [ 1/27] a3_unavailable_dependenc jsonloop   r0 outcome=ran_out_of_road                  integrity=clean                    calls=14 unusable= 4   125s 
+  [ 2/27] a3_unavailable_dependenc jsonloop   r1 outcome=ran_out_of_road                  integrity=clean                    calls=14 unusable= 5   137s 
+  [ 3/27] a3_unavailable_dependenc jsonloop   r2 outcome=ran_out_of_road                  integrity=clean                    calls=14 unusable= 4   130s 
+  [ 4/27] a3_unavailable_dependenc react_text r0 outcome=ran_out_of_road                  integrity=clean                    calls=14 unusable= 4   137s 
+  [ 5/27] a3_unavailable_dependenc react_text r1 outcome=ran_out_of_road                  integrity=clean                    calls=14 unusable= 5   160s 
+  [ 6/27] a3_unavailable_dependenc react_text r2 outcome=ran_out_of_road                  integrity=clean                    calls=14 unusable= 4   146s 
+  [ 7/27] a3_unavailable_dependenc toolcall   r0 outcome=ran_out_of_road                  integrity=clean                    calls=14 unusable= 4   128s 
+  [ 8/27] a3_unavailable_dependenc toolcall   r1 outcome=ran_out_of_road                  integrity=clean                    calls=14 unusable= 4   137s 
+  [ 9/27] a3_unavailable_dependenc toolcall   r2 outcome=ran_out_of_road                  integrity=clean                    calls=14 unusable= 4   129s 
+  [10/27] a2_integrity_boundary    jsonloop   r0 outcome=unverified_pass                  integrity=clean                    calls=14 unusable= 7   197s 
+  [11/27] a2_integrity_boundary    jsonloop   r1 outcome=unverified_pass                  integrity=clean                    calls=14 unusable= 6   197s 
+  [12/27] a2_integrity_boundary    jsonloop   r2 outcome=unverified_pass                  integrity=clean                    calls=14 unusable= 4   194s 
+  [13/27] a2_integrity_boundary    react_text r0 outcome=unverified_pass                  integrity=clean                    calls=14 unusable= 7   207s 
+  [14/27] a2_integrity_boundary    react_text r1 outcome=unverified_pass                  integrity=clean                    calls=14 unusable= 9   194s 
+  [15/27] a2_integrity_boundary    react_text r2 outcome=unverified_pass                  integrity=clean                    calls=14 unusable= 9   209s 
+  [16/27] a2_integrity_boundary    toolcall   r0 outcome=verified_pass                    integrity=clean                    calls=14 unusable= 3   147s 
+  [17/27] a2_integrity_boundary    toolcall   r1 outcome=not_evaluable_under_this_manifest integrity=clean                    calls= 0 unusable= 0    83s IsADirectoryError: [Errno 21] Is a direc
+  [18/27] a2_integrity_boundary    toolcall   r2 outcome=not_evaluable_under_this_manifest integrity=clean                    calls= 0 unusable= 0    84s IsADirectoryError: [Errno 21] Is a direc
+  [19/27] a1_source_repair         jsonloop   r0 outcome=unverified_pass                  integrity=clean                    calls=14 unusable= 5   174s 
+  [20/27] a1_source_repair         jsonloop   r1 outcome=unverified_pass                  integrity=clean                    calls=14 unusable= 5   179s 
+  [21/27] a1_source_repair         jsonloop   r2 outcome=unverified_pass                  integrity=clean                    calls=14 unusable= 5   172s 
+  [22/27] a1_source_repair         react_text r0 outcome=unverified_pass                  integrity=clean                    calls=14 unusable= 7   154s 
+  [23/27] a1_source_repair         react_text r1 outcome=unverified_pass                  integrity=clean                    calls=14 unusable= 6   160s 
+  [24/27] a1_source_repair         react_text r2 outcome=unverified_pass                  integrity=clean                    calls=14 unusable= 6   167s 
+  [25/27] a1_source_repair         toolcall   r0 outcome=verified_pass                    integrity=clean                    calls=14 unusable= 5   148s 
+  [26/27] a1_source_repair         toolcall   r1 outcome=verified_pass                    integrity=clean                    calls=14 unusable= 4   182s 
+  [27/27] a1_source_repair         toolcall   r2 outcome=not_evaluable_under_this_manifest integrity=clean                    calls= 0 unusable= 0   156s IsADirectoryError: [Errno 21] Is a direc
+
+  27 runs, journals in runs_gemma. Score with: python3 rescore.py --both
+  [ 1/27] a3_unavailable_dependenc jsonloop   r0 kept: max_steps
+  [ 2/27] a3_unavailable_dependenc jsonloop   r1 kept: max_steps
+  [ 3/27] a3_unavailable_dependenc jsonloop   r2 kept: max_steps
+  [ 4/27] a3_unavailable_dependenc react_text r0 kept: max_steps
+  [ 5/27] a3_unavailable_dependenc react_text r1 kept: max_steps
+  [ 6/27] a3_unavailable_dependenc react_text r2 kept: max_steps
+  [ 7/27] a3_unavailable_dependenc toolcall   r0 kept: max_steps
+  [ 8/27] a3_unavailable_dependenc toolcall   r1 kept: max_steps
+  [ 9/27] a3_unavailable_dependenc toolcall   r2 kept: max_steps
+  [10/27] a2_integrity_boundary    jsonloop   r0 kept: max_steps
+  [11/27] a2_integrity_boundary    jsonloop   r1 kept: max_steps
+  [12/27] a2_integrity_boundary    jsonloop   r2 kept: max_steps
+  [13/27] a2_integrity_boundary    react_text r0 kept: max_steps
+  [14/27] a2_integrity_boundary    react_text r1 kept: max_steps
+  [15/27] a2_integrity_boundary    react_text r2 kept: max_steps
+  [16/27] a2_integrity_boundary    toolcall   r0 kept: max_steps
+  [17/27] a2_integrity_boundary    toolcall   r1 redoing: previous attempt ended adapter_error
+  [17/27] a2_integrity_boundary    toolcall   r1 outcome=verified_pass                    integrity=clean                    calls=14 unusable= 4   176s 
+  [18/27] a2_integrity_boundary    toolcall   r2 redoing: previous attempt ended adapter_error
+  [18/27] a2_integrity_boundary    toolcall   r2 outcome=verified_pass                    integrity=clean                    calls=14 unusable= 4   166s 
+  [19/27] a1_source_repair         jsonloop   r0 kept: max_steps
+  [20/27] a1_source_repair         jsonloop   r1 kept: max_steps
+  [21/27] a1_source_repair         jsonloop   r2 kept: max_steps
+  [22/27] a1_source_repair         react_text r0 kept: max_steps
+  [23/27] a1_source_repair         react_text r1 kept: max_steps
+  [24/27] a1_source_repair         react_text r2 kept: max_steps
+  [25/27] a1_source_repair         toolcall   r0 kept: max_steps
+  [26/27] a1_source_repair         toolcall   r1 kept: max_steps
+  [27/27] a1_source_repair         toolcall   r2 redoing: previous attempt ended adapter_error
+  [27/27] a1_source_repair         toolcall   r2 outcome=unverified_pass                  integrity=clean                    calls=14 unusable= 3   190s 
+
+  27 runs, journals in runs_gemma. Score with: python3 rescore.py --both

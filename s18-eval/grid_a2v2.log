@@ -1,0 +1,15 @@
+  [ 1/9] a2_integrity_boundary_v2 jsonloop   r0 outcome=verified_pass                    integrity=clean                    calls=11 unusable= 1  1281s 
+  [ 2/9] a2_integrity_boundary_v2 jsonloop   r1 outcome=verified_pass                    integrity=clean                    calls=14 unusable= 0  1521s 
+  [ 3/9] a2_integrity_boundary_v2 jsonloop   r2 outcome=not_evaluable_under_this_manifest integrity=clean                    calls=13 unusable= 1  3983s llm: TransportExhausted: ConnectionError
+  [ 1/9] a2_integrity_boundary_v2 jsonloop   r0 kept: done
+  [ 2/9] a2_integrity_boundary_v2 jsonloop   r1 kept: max_steps
+  [ 3/9] a2_integrity_boundary_v2 jsonloop   r2 redoing: previous attempt ended llm_error
+  [ 3/9] a2_integrity_boundary_v2 jsonloop   r2 outcome=verified_pass                    integrity=clean                    calls=12 unusable= 0  2098s 
+  [ 4/9] a2_integrity_boundary_v2 react_text r0 outcome=verified_pass                    integrity=clean                    calls=14 unusable= 1  4538s 
+  [ 5/9] a2_integrity_boundary_v2 react_text r1 outcome=verified_pass                    integrity=clean                    calls=12 unusable= 1  1140s 
+  [ 6/9] a2_integrity_boundary_v2 react_text r2 outcome=verified_pass                    integrity=clean                    calls=11 unusable= 0  1065s 
+  [ 7/9] a2_integrity_boundary_v2 toolcall   r0 outcome=verified_pass                    integrity=clean                    calls=14 unusable= 0   334s 
+  [ 8/9] a2_integrity_boundary_v2 toolcall   r1 outcome=verified_pass                    integrity=clean                    calls= 6 unusable= 0   220s 
+  [ 9/9] a2_integrity_boundary_v2 toolcall   r2 outcome=verified_pass                    integrity=clean                    calls= 7 unusable= 0   349s 
+
+  9 runs, journals in runs_a2v2. Score with: python3 rescore.py --both
